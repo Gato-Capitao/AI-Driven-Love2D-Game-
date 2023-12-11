@@ -9,6 +9,7 @@ local QNT_PER_GENERATION = 500
 local current_qnt
 local current_generation = 0
 local obstacles_velocity = 5
+local score = 0
 
 
 buddies = {}
@@ -26,6 +27,9 @@ function create_obstacles()
 end
 
 function get_best()
+    --[[
+    This function will return the buddy with most points.
+    --]]
     local max_points = 0
     local best
     
@@ -40,12 +44,17 @@ function get_best()
 end
 
 function generate_buddies()
+    --[[
+    This function will return a table with QNTD_PER_GENERATION number of buddies.
+    
+    if it's the second generation, it will create the buddies based on the best of the last generation.
+        ]]--
     local initial_x = 50
     local initial_y = 100
     local sum = 0
-    local mod_distance = 0.5
-    local mod_down = 0.5
-    local mod_top = 0.5
+    local mod_distance = 2
+    local mod_down = 2
+    local mod_top = 1
     local trigger = 500
 
     if current_generation>0 then
@@ -87,8 +96,11 @@ function love.load()
     --Create obstacles
     obstacles.top = {}
     obstacles.down = {}
-
     create_obstacles()
+
+    --Reset score
+    score = 0
+    
 end
 
 function love.draw()
@@ -110,11 +122,13 @@ end
 function love.update()
     local first_obstacle_top = obstacles.top[1].vertices
     local first_obstacle_down = obstacles.down[1].vertices
+    score = score + 1
 
     for pos, buddy in pairs(buddies) do
         if buddy.active == true then
             --Give points
-            buddy.points = -1*(obstacles.top[1].vertices[1]-buddy.x)+math.abs(obstacles.top[1].stub-buddy.y)+math.abs(obstacles.down[1].stub-buddy.y)
+            buddy.points = score+(((obstacles.top[1].vertices[1]-buddy.x)+math.abs(obstacles.top[1].stub-buddy.y)+math.abs(obstacles.down[1].stub-buddy.y))/100)
+
             --Move buddy
             buddy.y = buddy.y - gravity
             trigger_on = buddy.mod_distance*(obstacles.top[1].vertices[1]-buddy.x)+buddy.mod_top*(obstacles.top[1].stub-buddy.y)+buddy.mod_down*(obstacles.down[1].stub-buddy.y)<=buddy.trigger

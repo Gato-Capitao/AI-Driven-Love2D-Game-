@@ -9,11 +9,11 @@ function  constructor_buddy:create(x, y, pmod_distance, pmod_top, pmod_down, p_t
         velocity = 10, 
         width = 50, 
         mod_distance = pmod_distance + math.random(0, 100)/100,
-        mod_top = pmod_top + math.random(0, 100)/100,
-        mod_down = pmod_down + math.random(0, 100)/100,
-        trigger = p_trigger + math.random(0, 100)/100,
+        mod_top = pmod_top + math.random(-100, 100)/100,
+        mod_down = pmod_down + math.random(-100, 100)/100,
+        trigger = p_trigger + math.random(-100, 100)/100,
         points = 0,
-        active = true
+        active = true,
     }
     setmetatable(buddy, self) 
     self.__index = self
