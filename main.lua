@@ -1,3 +1,4 @@
+---@diagnostic disable: lowercase-global
 require("objects")
 require("base")
 math.randomseed(os.time())
@@ -19,16 +20,28 @@ obstacles = {
 }
 
 function create_obstacles()
-    table.insert(obstacles.top,constructor_obstacle:create(SCREEN_WIDTH, true, SCREEN_HEIGHT/1.5, SCREEN_HEIGHT))
+    --[[
+        This function will create two obstacles: one on the bottom and on the top of the screen.
+        
+        @param SCREEN_WIDTH: the width of the screen.
+        @param SCREEN_HEIGHT: the height of the screen.
+    ]]--
 
-    local tamanho = #obstacles.top
-    local max_height = SCREEN_HEIGHT-(obstacles.top[tamanho].stub+150)
-    table.insert(obstacles.down, constructor_obstacle:create(SCREEN_WIDTH, false, max_height, SCREEN_HEIGHT))
+    local top_obstacle = constructor_obstacle:create(SCREEN_WIDTH, true, SCREEN_HEIGHT / 1.5, SCREEN_HEIGHT)
+
+    local bottom_obstacle_height = SCREEN_HEIGHT - (top_obstacle.stub + 150)
+
+    local bottom_obstacle = constructor_obstacle:create(SCREEN_WIDTH, false, bottom_obstacle_height, SCREEN_HEIGHT)
+
+    table.insert(obstacles.top,top_obstacle)
+    table.insert(obstacles.down, bottom_obstacle)
 end
 
 function get_best()
     --[[
     This function will return the buddy with most points.
+
+        aaaaa---- se todos os buddies tiverem valor negativo, ele acaba retornando valor nulo.
     --]]
     local max_points = 0
     local best
