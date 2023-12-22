@@ -6,7 +6,7 @@ function  constructor_buddy:create(x, y, pmod_distance, pmod_top, pmod_down, p_t
     local buddy = {
         x = x, 
         y = y, 
-        velocity = 50, 
+        velocity = 10, 
         width = 50, 
         mod_distance = pmod_distance + math.random(0, 100)/100,
         mod_top = pmod_top + math.random(-100, 100)/100,

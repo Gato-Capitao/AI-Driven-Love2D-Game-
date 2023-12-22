@@ -21,7 +21,10 @@ obstacles = {
 
 function create_obstacles()
     --[[
-        This function will create two obstacles: one on the bottom and on the top of the screen.
+        This function will create two obstacles, these are:
+            Top obstacle: it's the first one that will be created, its height is random and based on the SCREEN_HEIGHT.
+
+            Bottom obstacle: its height is based on the top obstacle height added space for the buddy to pass.
         
         @param SCREEN_WIDTH: the width of the screen.
         @param SCREEN_HEIGHT: the height of the screen.
@@ -40,14 +43,12 @@ end
 function get_best()
     --[[
     This function will return the buddy with most points.
-
-        aaaaa---- se todos os buddies tiverem valor negativo, ele acaba retornando valor nulo.
     --]]
-    local max_points = 0
-    local best
+    local max_points = buddies[1].points
+    local best = buddies[1]
     
-    for _, buddy in pairs(buddies) do
-        if buddy.points>max_points then
+    for pos, buddy in pairs(buddies) do
+        if pos>1 and buddy.points>max_points then
             max_points = buddy.points
             best = buddy
         end
@@ -133,62 +134,92 @@ function love.draw()
 end
 
 function love.update()
+    --[[
+    love.update()
+
+    This function handles the game's update logic, including the movement of buddies, obstacle collision detection,
+    score calculation, obstacle movement, obstacle creation, and obstacle removal.
+
+    @function love.update
+    @usage love.update()
+
+    @see collision_square_triangle
+    @see create_obstacles
+    @see Buddy.destroy
+    @see love.load
+    --]]
+
+    -- Retrieve the vertices of the nearest obstacle from buddy
     local first_obstacle_top = obstacles.top[1].vertices
     local first_obstacle_down = obstacles.down[1].vertices
+
+    -- Increment the score
     score = score + 1
 
+    -- Iterate through buddies
     for pos, buddy in pairs(buddies) do
         if buddy.active == true then
-            --Give points
-            buddy.points = score+(((obstacles.top[1].vertices[1]-buddy.x)+math.abs(obstacles.top[1].stub-buddy.y)+math.abs(obstacles.down[1].stub-buddy.y))/100)
+            -- Calculate points based on buddy's position and obstacles
+            buddy.points = score + (((obstacles.top[1].vertices[1] - buddy.x) +
+                math.abs(obstacles.top[1].stub - buddy.y) +
+                math.abs(obstacles.down[1].stub - buddy.y)) / 100)
 
-            --Move buddy
-            buddy.y = buddy.y - gravity
-            trigger_on = buddy.mod_distance*(obstacles.top[1].vertices[1]-buddy.x)+buddy.mod_top*(obstacles.top[1].stub-buddy.y)+buddy.mod_down*(obstacles.down[1].stub-buddy.y)<=buddy.trigger
+            -- Check trigger conditions for jumping
+            local trigger_on = buddy.mod_distance * (obstacles.top[1].vertices[1] - buddy.x) +
+                buddy.mod_top * (obstacles.top[1].stub - buddy.y) +
+                buddy.mod_down * (obstacles.down[1].stub - buddy.y) <= buddy.trigger
 
-            keyboard_on = love.keyboard.isDown("space")
-            if trigger_on or keyboard_on then
+            if trigger_on then
                 buddy.jump()
+            else
+                -- Move the buddy downward due to gravity
+                buddy.y = buddy.y - gravity
             end
 
-            --Verify if the buddy colide with a obstacle
-            local colide_top_triangle = collision_square_triangle(buddy.x, buddy.y, buddy.width, first_obstacle_top[1], first_obstacle_top[2], first_obstacle_top[3], first_obstacle_top[4], first_obstacle_top[5], first_obstacle_top[6])
-            local colide_down_triangle = collision_square_triangle(buddy.x, buddy.y, buddy.width, first_obstacle_down[1], first_obstacle_down[2], first_obstacle_down[3], first_obstacle_down[4], first_obstacle_down[5], first_obstacle_down[6])
-            local colide_border = buddy.y < 0 or buddy.y+buddy.width > SCREEN_HEIGHT
-            
+            -- Check for collisions with obstacles or border
+            local colide_top_triangle = collision_square_triangle(buddy.x, buddy.y, buddy.width,
+                first_obstacle_top[1], first_obstacle_top[2], first_obstacle_top[3],
+                first_obstacle_top[4], first_obstacle_top[5], first_obstacle_top[6])
+
+            local colide_down_triangle = collision_square_triangle(buddy.x, buddy.y, buddy.width,
+                first_obstacle_down[1], first_obstacle_down[2], first_obstacle_down[3],
+                first_obstacle_down[4], first_obstacle_down[5], first_obstacle_down[6])
+
+            local colide_border = buddy.y < 0 or buddy.y + buddy.width > SCREEN_HEIGHT
+
+            -- Handle buddy destruction based on collisions
             if colide_top_triangle or colide_down_triangle then
                 buddy:destroy(1)
                 current_qnt = current_qnt - 1
             elseif colide_border then
-                buddy:destroy(100)
+                buddy:destroy(10)
                 current_qnt = current_qnt - 1
             end
-
         end 
     end
 
-    --Verify if there is any buddy
-    if current_qnt==0 then
+    -- Reset the game if there are no more buddies
+    if current_qnt == 0 then
         love.load()
         return 0
     end
 
-    --Move obstacles
-    for index=1, #obstacles.top do
+    -- Move obstacles horizontally
+    for index = 1, #obstacles.top do
         for index_vertice = 1, 6 do
-            if index_vertice%2==1 then
+            if index_vertice % 2 == 1 then
                 obstacles.top[index].vertices[index_vertice] = obstacles.top[index].vertices[index_vertice] - obstacles_velocity
                 obstacles.down[index].vertices[index_vertice] = obstacles.down[index].vertices[index_vertice] - obstacles_velocity
             end
         end
     end
 
-    --Create more obstacles
+    -- Create more obstacles if the last one is near the screen edge
     if obstacles.top[#obstacles.top].vertices[1] < 300 then
         create_obstacles()
     end
 
-    --Remove obstacles if hits the border
+    -- Remove obstacles if they hit the left screen edge
     if obstacles.top[1].vertices[1] <= 0 then
         table.remove(obstacles.top, 1)
         table.remove(obstacles.down, 1)
