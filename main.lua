@@ -1,5 +1,9 @@
---- Main Script for Buddy Jump Game
--- This script contains the main logic for the Buddy Jump game, including the game loop, object creation, and initialization.
+--[[
+    Main Script for Buddy Jump Game
+
+This script contains the main logic for the Buddy Jump game, including the game loop, object creation, and initialization.
+
+-=]]
 
 -- Required modules for the game
 require("objects")
@@ -183,11 +187,11 @@ function love.update()
             end
 
             -- Check for collisions with obstacles or border
-            local colide_top_triangle = collision_square_triangle(buddy.x, buddy.y, buddy.width,
+            local colide_top_triangle = COLLISION_SQUARE_TRIANGLE(buddy.x, buddy.y, buddy.width,
                 first_obstacle_top[1], first_obstacle_top[2], first_obstacle_top[3],
                 first_obstacle_top[4], first_obstacle_top[5], first_obstacle_top[6])
 
-            local colide_down_triangle = collision_square_triangle(buddy.x, buddy.y, buddy.width,
+            local colide_down_triangle = COLLISION_SQUARE_TRIANGLE(buddy.x, buddy.y, buddy.width,
                 first_obstacle_down[1], first_obstacle_down[2], first_obstacle_down[3],
                 first_obstacle_down[4], first_obstacle_down[5], first_obstacle_down[6])
 
