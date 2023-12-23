@@ -1,25 +1,31 @@
----@diagnostic disable: lowercase-global
+--- Main Script for Buddy Jump Game
+-- This script contains the main logic for the Buddy Jump game, including the game loop, object creation, and initialization.
+
+-- Required modules for the game
 require("objects")
 require("base")
+
+-- Seed the random number generator with the current system time
 math.randomseed(os.time())
 
-local gravity = -5
-local SCREEN_WIDTH = love.graphics.getWidth()
-local SCREEN_HEIGHT = love.graphics.getHeight()
-local QNT_PER_GENERATION = 500
-local current_qnt
-local current_generation = 0
-local obstacles_velocity = 5
-local score = 0
+-- Constants and parameters
+local GRAVITY = -5  -- Gravity affecting the buddies
+local SCREEN_WIDTH = love.graphics.getWidth()  -- Width of the game window
+local SCREEN_HEIGHT = love.graphics.getHeight()  -- Height of the game window
+local QNT_PER_GENERATION = 500  -- Number of buddies generated per generation
+local current_qnt  -- Current quantity of active buddies
+local current_generation = 0  -- Current generation number
+local obstacles_velocity = 5  -- Horizontal velocity of obstacles
+local score = 0  -- Game score
 
-
-buddies = {}
-obstacles = {
-    top = {},
-    down = {}
+-- Lists to store buddies and obstacles
+local buddies = {}
+local obstacles = {
+    top = {},  -- List to store the top obstacles
+    down = {}  -- List to store the bottom obstacles
 }
 
-function create_obstacles()
+local function create_obstacles()
     --[[
         This function will create two obstacles, these are:
             Top obstacle: it's the first one that will be created, its height is random and based on the SCREEN_HEIGHT.
@@ -40,7 +46,7 @@ function create_obstacles()
     table.insert(obstacles.down, bottom_obstacle)
 end
 
-function get_best()
+local function get_best()
     --[[
     This function will return the buddy with most points.
     --]]
@@ -57,7 +63,7 @@ function get_best()
     return best
 end
 
-function generate_buddies()
+local function generate_buddies()
     --[[
     This function will return a table with QNTD_PER_GENERATION number of buddies.
     
@@ -73,7 +79,7 @@ function generate_buddies()
 
     if current_generation>0 then
         --Reborn the best buddy
-        best_buddy = get_best()
+        local best_buddy = get_best()
             --Reset points
         best_buddy.points = 0
         best_buddy.active = true
@@ -173,7 +179,7 @@ function love.update()
                 buddy.jump()
             else
                 -- Move the buddy downward due to gravity
-                buddy.y = buddy.y - gravity
+                buddy.y = buddy.y - GRAVITY
             end
 
             -- Check for collisions with obstacles or border
