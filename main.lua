@@ -40,11 +40,11 @@ local function create_obstacles()
         @param SCREEN_HEIGHT: the height of the screen.
     ]]--
 
-    local top_obstacle = constructor_obstacle:create(SCREEN_WIDTH, true, SCREEN_HEIGHT / 1.5, SCREEN_HEIGHT)
+    local top_obstacle = CONSTRUCTOR_OBSTACLES:create(SCREEN_WIDTH, true, SCREEN_HEIGHT / 1.5, SCREEN_HEIGHT)
 
     local bottom_obstacle_height = SCREEN_HEIGHT - (top_obstacle.stub + 150)
 
-    local bottom_obstacle = constructor_obstacle:create(SCREEN_WIDTH, false, bottom_obstacle_height, SCREEN_HEIGHT)
+    local bottom_obstacle = CONSTRUCTOR_OBSTACLES:create(SCREEN_WIDTH, false, bottom_obstacle_height, SCREEN_HEIGHT)
 
     table.insert(obstacles.top,top_obstacle)
     table.insert(obstacles.down, bottom_obstacle)
@@ -103,7 +103,7 @@ local function generate_buddies()
     end
     
     for index = 1+sum, QNT_PER_GENERATION do
-        table.insert(buddies, constructor_buddy:create(initial_x, initial_y, mod_distance, mod_top, mod_down, trigger))
+        table.insert(buddies, CONSTRUCTOR_BUDDY:create(initial_x, initial_y, mod_distance, mod_top, mod_down, trigger))
     end
 
     current_qnt = QNT_PER_GENERATION

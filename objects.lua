@@ -1,7 +1,7 @@
-constructor_buddy = {}
+CONSTRUCTOR_BUDDY = {}
 math.randomseed(os.time())
 
-function  constructor_buddy:create(x, y, pmod_distance, pmod_top, pmod_down, p_trigger)
+function  CONSTRUCTOR_BUDDY:create(x, y, pmod_distance, pmod_top, pmod_down, p_trigger)
     --Concrete creator 
     local buddy = {
         x = x, 
@@ -33,9 +33,9 @@ function  constructor_buddy:create(x, y, pmod_distance, pmod_top, pmod_down, p_t
     return buddy
 end
 
-constructor_obstacle = {}
+CONSTRUCTOR_OBSTACLES = {}
 
-function  constructor_obstacle:create(x, isTop, max_lenght, total_lenght)
+function  CONSTRUCTOR_OBSTACLES:create(x, isTop, max_lenght, total_lenght)
     local y
     local obstacle = {
     }
