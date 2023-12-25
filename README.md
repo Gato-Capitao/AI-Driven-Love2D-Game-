@@ -1,6 +1,6 @@
 # AI-Driven-Love2D-Game
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![License](https://img.shields.io/badge/License-Apache-blue.svg)
 
 ## Description
 In Flappy Learning, players encounter a modified version of the familiar Flappy Bird gameplay. However, what sets this project apart is its integration with machine learning algorithms. The game serves as a testing ground to evaluate whether machine learning techniques can effectively learn and perform well in a dynamic and challenging gaming environment.
