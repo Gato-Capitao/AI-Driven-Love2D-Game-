@@ -31,3 +31,15 @@ Alternatively, you can download the .AppImage file from the Love2D website and m
 
 ```bash
 chmod +x love-11.3-x86_64.AppImage
+```
+
+## Running the Project
+
+If you are using the Love2D app image to run the project, you can just execute the app image using the directory of the folder within main.lua file as arg. For example:
+```bash
+./love.AppImage /home/user/download/lua_game
+```
+And if you installed Love in your machine you can just run direct in the folder whitin main.lua:
+```bash
+love .
+```
