@@ -13,7 +13,6 @@ In Flappy Learning, players encounter a modified version of the familiar Flappy 
 - [Running the Project](#running-the-project)
 - [Built With](#built-with)
 - [License](#license)
-- [Acknowledgments](#acknowledgments)
 
 ## Getting Started
 
@@ -43,3 +42,21 @@ And if you installed Love in your machine you can just run direct in the folder 
 ```bash
 love .
 ```
+## Built With
+
+- [Visual Studio Code](https://code.visualstudio.com/): Used as the primary code editor for development.
+- [Lua](https://www.lua.org/): The programming language used for implementing game logic.
+- [LOVE](https://love2d.org/): The game framework employed for creating the interactive gameplay and graphics.
+
+## License
+
+This project is licensed under the terms of the [Apache License 2.0](LICENSE.md).
+
+
+
+
+
+
+
+
+
